@@ -1,0 +1,125 @@
+#include<bits/stdc++.h>
+#include <iterator>
+#include <iostream>
+#include <numeric>
+#include <math.h>
+#define ll long long
+#define ull long
+#define mpa make_pair
+#define pb push_back
+#define ff first
+#define pii pair<ll,ll>
+#define dd double
+#define trace(x) cerr << #x << " : " << x << endl
+#define ss second
+#define boost ios_base::sync_with_stdio(0)
+#define forp(i,a,b) for(ll i=a;i<=b;i++)
+#define rep(i,n)    for(ll i=0;i<n;++i)
+#define ren(i,n)    for(ll i=n-1;i>=0;i--)
+#define forn(i,a,b) for(ll i=a;i>=b;i--)
+#define all(c) (c).begin(),(c).end()
+#define tr(c,i) for(typeof((c).begin()) i = (c).begin(); i != (c).end();
+#define sc(x) scanf("%lld",&x)
+#define clr(x,val) memset(x,val,sizeof(x))
+#define pr(x) printf("%lld\n",x) 
+#define gc getchar
+#define pdd pair<dd,dd>
+#define read_arr(a,n) for(ll i=1;i<=n;i++)cin>>a[i];
+#define init_arr(a,n) for(ll i=1;i<=n;i++)a[i]=n-i+1;
+#define prec(x) cout<<fixed<<setprecision(x)
+#define fre freopen("input.txt","r",stdin),freopen("output.txt","w",stdout)
+#define arr array 
+using namespace std;
+ll dis[28][28];
+void create_graph(vector<string> v){
+	
+	
+	ll n=v.size();
+	for(ll i=0;i<26;i++){
+		for(ll j=0;j<26;j++){
+			dis[i][j]=1e9;
+		}
+		dis[i][i]=0;
+	}
+	
+	for(ll i=0;i<n;i++){
+		ll m=v[i].size();
+		
+		for(ll j=0;j<m;j++){
+			for(ll k=0;k<m;k++){
+				
+					ll x=v[i][j]-'A';
+					ll y=v[i][k]-'A';
+					
+					dis[x][y]=min(dis[x][y],1ll);
+					dis[y][x]=min(dis[y][x],1ll);
+				
+			}
+		}
+	}
+	
+	for(ll k=0;k<26;k++){
+		for(ll i=0;i<26;i++){
+			for(ll j=0;j<26;j++){
+				dis[i][j]=min(dis[i][j],dis[i][k]+dis[k][j]);
+			}
+		}
+	}
+	
+
+	
+}
+ll query(string a,string b){
+	ll n=a.size();
+	ll m=b.size();
+	ll ans=1e9;
+	
+	for(ll i=0;i<n;i++){
+		for(ll j=0;j<m;j++){
+			ll x=a[i]-'A';
+			ll y=b[j]-'A';
+			ans=min(ans,dis[x][y]);
+		}
+	}
+	
+	if(ans==1e9)return -1;
+	return ans+2;
+}
+int main(){
+	ll t;
+	cin>>t;
+	ll tc=1;
+	
+	while(t--){
+		ll n,q;
+		vector<string> v;
+		cin>>n>>q;
+		for(ll i=0;i<n;i++){
+			string s;
+			cin>>s;
+			v.pb(s);
+		}
+		
+		create_graph(v);
+		
+		vector<ll> sol;
+		for(ll i=0;i<q;i++){
+			ll x,y;
+			cin>>x>>y;
+			
+			x--;
+			y--;
+			
+			sol.pb(query(v[x],v[y]));
+		}
+		
+		cout<<"Case #"<<tc<<": ";
+		for(ll i=0;i<q;i++)cout<<sol[i]<<" ";
+		cout<<endl;
+		tc++;
+	}
+}
+
+
+	
+		
